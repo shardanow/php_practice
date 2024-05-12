@@ -32,7 +32,7 @@ class Router
 
     public function dispatch(string $method, string $path): void
     {
-        $uri = $this->normalizePath($path);
+        $path = $this->normalizePath($path);
         $method = strtoupper($method);
 
         foreach ($this->routes as $route) {
