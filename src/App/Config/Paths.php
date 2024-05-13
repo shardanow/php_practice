@@ -7,4 +7,5 @@ namespace App\Config;
 class Paths
 {
     public const VIEWS = __DIR__ . "/../Views";
+    public const SOURCE = __DIR__ . "/../../";
 }

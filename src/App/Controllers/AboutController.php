@@ -12,9 +12,9 @@ class AboutController
 {
     private TemplateEngine $view;
 
-    public function __construct()
+    public function __construct(TemplateEngine $view)
     {
-        $this->view = new TemplateEngine(Paths::VIEWS);
+        $this->view = $view;
     }
 
     public function about()

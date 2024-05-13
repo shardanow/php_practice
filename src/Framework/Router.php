@@ -30,7 +30,7 @@ class Router
         return $path !== "/" ? "/" . trim($path, "/") . "/" : $path;
     }
 
-    public function dispatch(string $method, string $path): void
+    public function dispatch(string $method, string $path, Container $container = null): void
     {
         $path = $this->normalizePath($path);
         $method = strtoupper($method);
@@ -39,8 +39,8 @@ class Router
             [$class, $classMethod] = $route["controller"];
 
             if ($route["method"] === $method && $route["path"] === $path) {
-                $comtrollerInstance = new $class();
-                $comtrollerInstance->$classMethod();
+                $comtrollerInstance = $container ? $container->make($class) : new $class();
+                $comtrollerInstance->{$classMethod}();
             }
         }
     }

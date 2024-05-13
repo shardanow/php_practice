@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Config\Paths;
-
 use Framework\TemplateEngine;
 
 class HomeController
 {
     private TemplateEngine $view;
 
-    public function __construct()
+    public function __construct(TemplateEngine $view)
     {
-        $this->view = new TemplateEngine(Paths::VIEWS);
+        $this->view = $view;
     }
 
     public function index()
