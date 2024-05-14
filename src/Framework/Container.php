@@ -11,6 +11,7 @@ use Framework\Exceptions\ContainerException;
 class Container
 {
     private array $containers = [];
+    private array $instances = [];
 
     /**
      * Register a dependency in the container.
@@ -37,34 +38,43 @@ class Container
             throw new ContainerException("Class {$key} is not exist in container.");
         }
 
-        return $this->containers[$key]();
+        if (array_key_exists($key, $this->instances)) {
+            return $this->instances[$key];
+        }
+
+        $factory = $this->containers[$key] ?? null;
+        $instance = $factory();
+
+        $this->instances[$key] = $instance;
+
+        return $instance;
     }
 
     /**
      * Resolve and instantiate a class with its dependencies.
      *
-     * @param string $key The class name to instantiate.
+     * @param string $className The class name to instantiate.
      * @return object An instance of the resolved class.
      * @throws ContainerException If the class is not instantiable or its dependencies cannot be resolved.
      */
-    public function make(string $key): object
+    public function make(string $className): object
     {
-        $reflector = new ReflectionClass($key);
+        $reflector = new ReflectionClass($className);
 
         if (!$reflector->isInstantiable()) {
-            throw new ContainerException("Class {$key} is not instantiable");
+            throw new ContainerException("Class {$className} is not instantiable");
         }
 
         $constructor = $reflector->getConstructor();
 
         if (!$constructor) {
-            return new $key;
+            return new $className;
         }
 
         $parameters = $constructor->getParameters();
 
         if (empty($parameters)) {
-            return new $key;
+            return new $className;
         }
 
         $dependencies = [];

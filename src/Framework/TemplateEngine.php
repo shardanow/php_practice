@@ -7,6 +7,7 @@ namespace Framework;
 class TemplateEngine
 {
     private string $templatePath;
+    private array $globalTemplateData = [];
 
     public function __construct(string $templatePath)
     {
@@ -21,7 +22,8 @@ class TemplateEngine
             throw new \Exception("Template file in {$templatePath} not found");
         }
 
-        extract($data);
+        extract($data, EXTR_SKIP);
+        extract($this->globalTemplateData, EXTR_SKIP);
 
         ob_start();
         require $templatePath;
@@ -34,5 +36,10 @@ class TemplateEngine
     public function getFullTemplatePath($template): string
     {
         return $this->templatePath . "/" . $template . ".php";
+    }
+
+    public function addGlobalData(string $key, mixed $value): void
+    {
+        $this->globalTemplateData[$key] = $value;
     }
 }

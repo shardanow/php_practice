@@ -7,6 +7,7 @@ namespace Framework;
 class Router
 {
     private array $routes = [];
+    private array $middlewares = [];
 
     public function __construct(array $routes = [])
     {
@@ -40,8 +41,22 @@ class Router
 
             if ($route["method"] === $method && $route["path"] === $path) {
                 $comtrollerInstance = $container ? $container->make($class) : new $class();
-                $comtrollerInstance->{$classMethod}();
+                $action = fn() => $comtrollerInstance->{$classMethod}();
+
+                foreach ($this->middlewares as $middleware) {
+                    $middlewareInstance = $container ? $container->make($middleware) : new $middleware();
+                    $action = fn() => $middlewareInstance->process($action);
+                }
+
+                $action();
+
+                return;
             }
         }
+    }
+
+    public function setMiddlewares(string $middleware): void
+    {
+        $this->middlewares[] = $middleware;
     }
 }
