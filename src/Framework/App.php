@@ -31,7 +31,7 @@ class App
         $this->router->dispatch($method, $path, $this->container);
     }
 
-    public function getPage(string $method, string $path, array $controller): void
+    public function route(string $method, string $path, array $controller): void
     {
         $this->router->setRoute($method, $path, $controller);
     }

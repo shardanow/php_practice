@@ -18,7 +18,7 @@ class HomeController
     public function index()
     {
         echo $this->view->render("index", [
-            //"title" => "Home",
+            "page" => "Home",
             "description" => "A simple PHP framework",
         ]);
     }

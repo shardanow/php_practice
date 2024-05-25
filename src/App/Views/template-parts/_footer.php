@@ -1,5 +1,5 @@
 <footer>
-    <p>&copy; 2024 php-practice. All rights reserved.</p>
+    <p>&copy; 2024 php-practice.</p>
 </footer>
 </body>
 
