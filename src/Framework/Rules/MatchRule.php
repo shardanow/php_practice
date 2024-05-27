@@ -6,15 +6,15 @@ namespace Framework\Rules;
 
 use Framework\Contracts\RuleInterface;
 
-class RequiredRule implements RuleInterface
+class MatchRule implements RuleInterface
 {
     public function validate(array $data, string $field, array $params): bool
     {
-        return !empty($data[$field]);
+        return $data[$field] === $data[$params[0]];
     }
 
     public function getErrorMessage(array $data, string $field, array $params): string
     {
-        return "The $field field is required!";
+        return "The $field field must match the {$params[0]} field!";
     }
 }

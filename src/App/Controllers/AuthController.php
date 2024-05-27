@@ -32,12 +32,14 @@ class AuthController
             "name" => $_POST["username"],
             "email" => $_POST["email"],
             "password" => $_POST["password"],
+            "confirm_password" => $_POST["confirm_password"],
         ];
 
         $rules = [
-            "name" => ["required", "min"],
+            "name" => ["required", "minLength:8"],
             "email" => ["required", "email"],
-            "password" => ["required", "min"],
+            "password" => ["required", "minLength:12"],
+            "confirm_password" => ["required", "match:password"],
         ];
 
         $errors = $this->validator->validate($data, $rules);

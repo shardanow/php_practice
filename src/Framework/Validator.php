@@ -24,11 +24,25 @@ class Validator
 
         foreach ($rules as $field => $fieldRules) {
             foreach ($fieldRules as $rule) {
-                if (array_key_exists($rule, $this->rules)) {
-                    $ruleInstance = $this->rules[$rule];
+                $ruleParams = [];
 
-                    if (!$ruleInstance->validate($data, $field, [])) {
-                        $errors[$field][] = $ruleInstance->getErrorMessage($data, $field, []);
+                // Check if the rule has parameters (e.g. min:3) and extract them to separate array
+                if (str_contains($rule, ":")) {
+                    [$rule_name, $ruleParams] = explode(":", $rule);
+                    $ruleParams = explode(",", $ruleParams);
+                } else {
+                    $rule_name = $rule;
+                }
+
+
+                // Check if the rule exists in the rules array
+                if (array_key_exists($rule_name, $this->rules)) {
+
+                    // Get the rule instance and validate the field
+                    $ruleInstance = $this->rules[$rule_name];
+
+                    if (!$ruleInstance->validate($data, $field, $ruleParams)) {
+                        $errors[$field][] = $ruleInstance->getErrorMessage($data, $field, $ruleParams);
                     }
                 }
             }
@@ -39,27 +53,4 @@ class Validator
 
         return $errors;
     }
-
-    // public function validate(array $data, array $rules): array
-    // {
-    //     $errors = [];
-
-    //     foreach ($rules as $field => $fieldRules) {
-    //         foreach ($fieldRules as $rule) {
-    //             if ($rule === "required" && empty($data[$field])) {
-    //                 $errors[$field][] = "The $field field is required";
-    //             }
-
-    //             if ($rule === "email" && !filter_var($data[$field], FILTER_VALIDATE_EMAIL)) {
-    //                 $errors[$field][] = "The $field field must be a valid email address";
-    //             }
-
-    //             if ($rule === "min" && strlen($data[$field]) < 6) {
-    //                 $errors[$field][] = "The $field field must be at least 6 characters";
-    //             }
-    //         }
-    //     }
-
-    //     return $errors;
-    // }
 }
