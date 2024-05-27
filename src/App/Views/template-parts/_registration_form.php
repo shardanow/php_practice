@@ -5,7 +5,8 @@
         <h2>Register</h2>
 
         <label for="username">Username</label>
-        <input type="text" id="username" name="username" required>
+        <input value="<?php echo htmlspecialchars($oldFormData['username'] ?: '', ENT_QUOTES, 'UTF-8'); ?>" type="text"
+            id="username" name="username" required>
         <?php if (array_key_exists('name', $errors)): ?>
             <?php foreach ($errors['name'] as $error): ?>
                 <div class="error_message"><?php echo $error; ?></div>
@@ -13,7 +14,8 @@
         <?php endif; ?>
 
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
+        <input value="<?php echo htmlspecialchars($oldFormData['email'] ?: '', ENT_QUOTES, 'UTF-8'); ?>" type="email"
+            id="email" name="email" required>
         <?php if (array_key_exists('email', $errors)): ?>
             <?php foreach ($errors['email'] as $error): ?>
                 <div class="error_message"><?php echo $error; ?></div>

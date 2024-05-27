@@ -25,8 +25,10 @@ class FlashMiddleware implements MiddlewareInterface
         }
 
         $this->templateEngine->addGlobalData("errors", $_SESSION['errors'] ?? []);
+        $this->templateEngine->addGlobalData("oldFormData", $_SESSION['oldFormData'] ?? []);
 
         unset($_SESSION['errors']);
+        unset($_SESSION['oldFormData']);
 
         $middleware();
     }
